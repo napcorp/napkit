@@ -1431,7 +1431,7 @@ const foods = [
     ]
   },
   {
-    id: "3", category: "office", img: "images/mousepad.jpg",
+    id: "3", category: "office", img: "images/mousematED.jpeg",
     name: "Ergonomic Mousepad", desc: "Memory foam wrist rest, non-slip base, smooth surface.",
     price: 599, link: "mousepad", time: "10 min", rating: 4.3,
     reviews: 312, returnRate: "1.8%", allergy: "None",
@@ -1443,7 +1443,7 @@ const foods = [
     ]
   },
   {
-    id: "4", category: "office", img: "images/sticky_notes.jpg",
+    id: "4", category: "office", img: "images/stickynotesED.jpeg",
     name: "Sticky Notes Bundle", desc: "6 pads, neon colors, 100 sheets each, super adhesive.",
     price: 180, link: "sticky-notes", time: "7 min", rating: 4.1,
     reviews: 548, returnRate: "0.8%", allergy: "None",
@@ -1454,7 +1454,7 @@ const foods = [
     ]
   },
   {
-    id: "5", category: "kids", img: "images/kids_art_kit.jpg",
+    id: "5", category: "kids", img: "images/artkitED.jpeg",
     name: "Kids Art Kit", desc: "Crayons, sketch pens, color pencils — 64 piece set.",
     price: 650, link: "art-kit", time: "15 min", rating: 4.3,
     reviews: 421, returnRate: "1.2%", allergy: "None",
@@ -1487,7 +1487,7 @@ const foods = [
     ]
   },
   {
-    id: "8", category: "health", img: "images/thermometer.jpg",
+    id: "8", category: "health", img: "images/thermometerED.jpeg",
     name: "Digital Thermometer", desc: "Instant read, LCD display, medical grade accuracy.",
     price: 350, link: "thermometer", time: "8 min", rating: 4.2,
     reviews: 1023, returnRate: "1.1%", allergy: "None",
@@ -1498,7 +1498,7 @@ const foods = [
     ]
   },
   {
-    id: "9", category: "grocery", img: "images/organic_honey.jpg",
+    id: "9", category: "grocery", img: "images/honeyED.jpeg",
     name: "Organic Honey", desc: "500g, raw & unprocessed, sourced from Himalayan bees.",
     price: 420, link: "honey", time: "11 min", rating: 4.4,
     reviews: 756, returnRate: "0.9%", allergy: "None",
@@ -1509,7 +1509,7 @@ const foods = [
     ]
   },
   {
-    id: "10", category: "grocery", img: "https://images.unsplash.com/photo-1586201375761-83865001e31c?w=500&auto=format&fit=crop&q=80",
+    id: "10", category: "grocery", img: "images/riceED.jpeg",
     name: "Basmati Rice 5kg", desc: "Premium aged basmati, extra-long grain, naturally aromatic.",
     price: 580, link: "rice", time: "13 min", rating: 4.5,
     reviews: 1340, returnRate: "0.4%", allergy: "None",
@@ -1553,7 +1553,7 @@ const foods = [
     ]
   },
   {
-    id: "14", category: "office", img: "images/cable_organizer.jpg",
+    id: "14", category: "office", img: "images/cablemanagementED.jpeg",
     name: "Cable Organizer Kit", desc: "Silicone cable clips, desk mount, 12 piece set.",
     price: 320, link: "cables", time: "8 min", rating: 4.2,
     reviews: 567, returnRate: "1.3%", allergy: "None",
@@ -1564,7 +1564,7 @@ const foods = [
     ]
   },
   {
-    id: "15", category: "health", img: "images/protein_bars.jpg",
+    id: "15", category: "health", img: "images/proteinbarED.jpeg",
     name: "Protein Bar Box", desc: "12 bars, 20g protein each, dark chocolate almond.",
     price: 960, link: "protein", time: "11 min", rating: 4.2,
     reviews: 1102, returnRate: "1.7%", allergy: "Nuts, Dairy, Soy",
@@ -1597,7 +1597,7 @@ const foods = [
     ]
   },
   {
-    id: "18", category: "home", img: "images/plant_mister.jpg",
+    id: "18", category: "home", img: "images/sprayerED.jpeg",
     name: "Plant Mister Spray", desc: "300ml glass bottle, fine mist, brass nozzle.",
     price: 290, link: "mister", time: "9 min", rating: 4.1,
     reviews: 234, returnRate: "1.9%", allergy: "None",
