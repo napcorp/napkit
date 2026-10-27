@@ -1,0 +1,1059 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="NapKit — Ultra-fast quick commerce delivering everyday essentials to your doorstep in 15 minutes. Eco-friendly packaging, EV delivery, and sustainable shopping.">
+    <meta name="keywords"
+        content="quick commerce, fast delivery, eco-friendly, EV delivery, NapKit, 15 minute delivery">
+    <meta name="author" content="NapKit">
+    <meta name="theme-color" content="#f8fafc">
+
+    <meta property="og:title" content="NapKit — 15-Minute Quick Commerce">
+    <meta property="og:description"
+        content="Ultra-fast delivery of everyday essentials. Eco-friendly, 15-minute delivery.">
+    <meta property="og:type" content="website">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com/">
+    <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+    <link rel="stylesheet" href="style.css">
+
+    <title>NapKit — 15-Minute Quick Commerce</title>
+</head>
+
+<body>
+
+    <div id="toast-container"></div>
+
+    <header id="header" class="top-nav-bar">
+        <div class="nav-brand-container">
+            <a href="#home" id="NutriPlates" data-page="home" class="brand-link">
+                <span class="brand-icon-box">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path
+                            d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z">
+                        </path>
+                        <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+                        <line x1="12" y1="22.08" x2="12" y2="12"></line>
+                    </svg>
+                </span>
+                <span class="brand-title">NapKit</span>
+            </a>
+        </div>
+
+        <div class="nav-center-group">
+            <nav id="navbar" class="nav-capsule">
+                <ul>
+                    <li><a href="#home" data-page="home" class="active">Home</a></li>
+                    <li><a href="#menu" data-page="#menu">Shop</a></li>
+                    <li><a href="#map-section" data-page="#map-section">Warehouses</a></li>
+                    <li><a href="#contact" data-page="#contact">Get In Touch</a></li>
+                    <li><a href="#reviews" data-page="reviews">Reviews</a></li>
+                    <li><a href="#settings" data-page="settings">Settings</a></li>
+                    <li><a href="#vendor" data-page="vendor">Vendor</a></li>
+                </ul>
+            </nav>
+
+            <div class="nav-divider"></div>
+
+            <div class="nav-search-wrapper" id="navSearchWrapper">
+                <div class="nav-search-bar" id="navSearchBar">
+                    <svg class="search-lens-icon" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                    </svg>
+                    <input type="text" id="nav-search-input" placeholder="Search products..." autocomplete="off">
+                    <button type="button" class="nav-search-clear" id="navSearchClear" title="Clear search">×</button>
+                </div>
+                
+                <div class="nav-search-dropdown" id="navSearchDropdown"></div>
+            </div>
+
+        </div>
+
+        <div id="menu-toggle">☰</div>
+    </header>
+
+    <button class="cart-toggle" id="cart-toggle" title="View Cart">
+        🛒
+        <span class="cart-badge" id="cart-badge">0</span>
+    </button>
+    <a href="tel:+18623060626" class="call-float" title="Call Support">📞</a>
+
+    <div class="cart-overlay" id="cart-overlay"></div>
+
+    <div class="sidebar-cart" id="sidebar-cart">
+        <div class="cart-header">
+            <h2>Your Cart</h2>
+            <button class="close-cart" id="close-cart">×</button>
+        </div>
+
+        <ul id="cart-items" class="cart-items"></ul>
+
+        <div id="empty-cart-message" class="empty-cart-message">
+            <span class="empty-cart-icon">🛒</span>
+            <strong>Your cart is empty</strong>
+            Browse our products and add items!
+        </div>
+
+        <div class="cart-section" id="customer-details-section">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+                <span class="cart-section-title" style="margin-bottom:0;">Delivery Details</span>
+                <button id="use-saved-settings" class="use-saved-btn">Use Saved Address</button>
+            </div>
+
+            <label class="pref-label" style="margin-top:0;">Full Name</label>
+            <input type="text" id="customer-name" placeholder="e.g. Rahul Sharma" class="cart-input">
+
+            <label class="pref-label">Delivery Address</label>
+            <textarea id="customer-address" placeholder="Flat, building, street, landmark, city" class="cart-input"
+                style="min-height:75px; resize:vertical;"></textarea>
+
+            <label class="pref-label">Phone Number</label>
+            <input type="tel" id="customer-phone" placeholder="+91 98765 43210" class="cart-input">
+        </div>
+
+        <div class="cart-section auto-reorder-banner">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+                <div>
+                    <strong style="font-size:13px; color:var(--text-primary); display:block;">Auto-Reorder
+                        Schedule</strong>
+                    <span style="font-size:11.5px; color:var(--text-muted);">Set automated recurring deliveries</span>
+                </div>
+                <button type="button" class="btn-schedule-trigger" id="cart-schedule-trigger">Set Schedule</button>
+            </div>
+        </div>
+
+        <div class="cart-section">
+            <span class="cart-section-title">Promotions & Points</span>
+            <div class="promo-input-row">
+                <input type="text" id="promo-code" placeholder="Enter coupon code" class="promo-input">
+                <button id="apply-promo" class="promo-btn">Apply</button>
+            </div>
+            <div class="ecopoints-row">
+                <span>Eco Points: <strong>120 pts</strong> (₹12 value)</span>
+                <button id="apply-ecopoints" class="ecopoints-btn">Redeem</button>
+            </div>
+        </div>
+
+        <div id="total-price-container" class="cart-total-container" style="display:none;">
+            <div class="total-row">
+                <span>Subtotal:</span>
+                <span id="total-price">₹0</span>
+            </div>
+            <button class="checkout-btn shimmer-btn" id="whatsapp-order">Proceed to Checkout →</button>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="product-modal-overlay">
+        <div class="product-modal" id="product-modal">
+            <button class="modal-close" id="product-modal-close">×</button>
+            <div class="modal-img-container">
+                <img id="modal-img" src="" alt="Product">
+                <span class="modal-badge" id="modal-badge">15-Min Delivery</span>
+            </div>
+            <div class="modal-details">
+                <span class="modal-category" id="modal-category"></span>
+                <h2 id="modal-title"></h2>
+                <div class="modal-rating" id="modal-rating"></div>
+                <p class="modal-desc" id="modal-desc"></p>
+                <div class="modal-variants" id="modal-variants"></div>
+                <div class="modal-reviews-box" id="modal-reviews-box">
+                    <h4>Customer Reviews</h4>
+                    <div id="modal-reviews" class="modal-reviews-list"></div>
+                </div>
+                <div class="modal-action-row">
+                    <div class="modal-price" id="modal-price"></div>
+                    <div class="modal-qty-controls">
+                        <button class="modal-qty-btn" id="modal-qty-minus">−</button>
+                        <span id="modal-qty-val">1</span>
+                        <button class="modal-qty-btn" id="modal-qty-plus">+</button>
+                    </div>
+                    <button class="checkout-btn shimmer-btn modal-add-btn" id="modal-add-cart">Add to Cart</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="schedule-modal-overlay">
+        <div class="product-modal schedule-modal" id="schedule-modal">
+            <button class="modal-close" id="schedule-modal-close">×</button>
+            <h2>Schedule Regular Delivery</h2>
+            <p class="text-muted">Set up recurring orders so you never run out of essentials.</p>
+            <div class="schedule-form">
+                <label class="pref-label">Frequency</label>
+                <div class="pref-options" id="schedule-freq">
+                    <button class="pref-btn active" data-val="daily">Daily</button>
+                    <button class="pref-btn" data-val="weekly">Weekly</button>
+                    <button class="pref-btn" data-val="biweekly">Bi-Weekly</button>
+                    <button class="pref-btn" data-val="monthly">Monthly</button>
+                </div>
+                <label class="pref-label">Preferred Time</label>
+                <select class="warehouse-select" id="schedule-time">
+                    <option value="morning">Morning (7–9 AM)</option>
+                    <option value="afternoon">Afternoon (12–2 PM)</option>
+                    <option value="evening">Evening (5–7 PM)</option>
+                </select>
+                <label class="pref-label">Items to Schedule</label>
+                <div id="schedule-items-list" class="schedule-items-list">
+                    <p class="text-muted">Add items to your cart first, then schedule them here.</p>
+                </div>
+                <button class="checkout-btn shimmer-btn" id="confirm-schedule" style="margin-top:16px;">Confirm
+                    Schedule</button>
+            </div>
+        </div>
+    </div>
+
+    <button class="scroll-to-top" id="scroll-to-top" title="Scroll to top">
+        <svg class="scroll-progress-ring" viewBox="0 0 48 48">
+            <defs>
+                <linearGradient id="scrollGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" style="stop-color:#0284c7" />
+                    <stop offset="100%" style="stop-color:#10b981" />
+                </linearGradient>
+            </defs>
+            <circle class="bg" cx="24" cy="24" r="21.5" />
+            <circle class="progress" cx="24" cy="24" r="21.5" />
+        </svg>
+        <svg class="scroll-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="18 15 12 9 6 15" />
+        </svg>
+    </button>
+
+    <div id="page-home" class="page-view active">
+        <main>
+            
+            <section id="home">
+                <div id="hero-sec" class="reveal">
+                    
+                    <div class="hero-escooter-track" aria-hidden="true">
+                        <div class="hero-escooter-lane">
+                            <div class="escooter-vehicle">
+                                <div class="escooter-trail">
+                                    <span class="trail-spark s1"></span>
+                                    <span class="trail-spark s2"></span>
+                                    <span class="trail-spark s3"></span>
+                                </div>
+                                <svg class="escooter-svg" width="96" height="76" viewBox="0 0 96 76" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    
+                                    <polygon points="78,32 96,25 96,39" fill="rgba(56, 189, 248, 0.2)" />
+                                    
+                                    <path d="M22 62 H68 L74 34 L71 33 L65 59 H24 Z" fill="#0284c7" />
+                                    <rect x="22" y="59" width="46" height="4" rx="2" fill="#38bdf8" />
+                                    <path d="M68 59 L75 28" stroke="#0ea5e9" stroke-width="3.5"
+                                        stroke-linecap="round" />
+                                    <path d="M71 28 H79" stroke="#0284c7" stroke-width="4" stroke-linecap="round" />
+                                    <circle cx="79" cy="28" r="2.5" fill="#38bdf8" />
+                                    
+                                    <circle cx="71" cy="62" r="9" fill="#0f172a" stroke="#38bdf8" stroke-width="2.5" />
+                                    <circle cx="71" cy="62" r="4" fill="#334155" />
+                                    <circle cx="21" cy="62" r="9" fill="#0f172a" stroke="#38bdf8" stroke-width="2.5" />
+                                    <circle cx="21" cy="62" r="4" fill="#334155" />
+                                    
+                                    <rect x="18" y="36" width="20" height="19" rx="3" fill="#d97706" stroke="#f59e0b"
+                                        stroke-width="1.5" />
+                                    <line x1="28" y1="36" x2="28" y2="55" stroke="#10b981" stroke-width="2.5" />
+                                    <line x1="18" y1="45" x2="38" y2="45" stroke="#10b981" stroke-width="2.5" />
+                                    <circle cx="28" cy="45" r="4" fill="#10b981" />
+                                    
+                                    <path d="M38 59 L45 47 L49 36 L62 36" stroke="#1e293b" stroke-width="4.5"
+                                        stroke-linecap="round" stroke-linejoin="round" />
+                                    <path d="M47 36 L55 24 L65 30" stroke="#0284c7" stroke-width="7.5"
+                                        stroke-linecap="round" stroke-linejoin="round" />
+                                    <path d="M55 24 L69 29 L75 28" stroke="#0ea5e9" stroke-width="3"
+                                        stroke-linecap="round" />
+                                    
+                                    <circle cx="57" cy="16" r="8.5" fill="#10b981" stroke="#059669"
+                                        stroke-width="1.5" />
+                                    <path d="M60 14 C64 15 65 19 62 20" fill="#0284c7" />
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="hero-road-track"></div>
+                    </div>
+
+                    <h1 id="hero-title">Everything <span class="hero-gradient-text">Delivered.</span><br>In <span
+                            class="hero-gradient-speed">15 Minutes.</span></h1>
+                    <p><span class="hero-p-gradient">Ultra-fast</span> quick commerce with <span
+                            class="hero-p-highlight">eco-friendly packaging</span> and <span class="hero-p-highlight">EV
+                            delivery</span>. Shop home, office, kids &amp;
+                        health essentials.</p>
+
+                    <div id="order-info">
+                        <a href="#menu" data-page="#menu" class="hero-btn hero-btn-primary ripple-effect">Shop Now</a>
+                        <a href="#" class="hero-btn hero-btn-secondary ripple-effect" id="open-schedule">Schedule
+                            Delivery</a>
+                        <a href="#map-section" data-page="#map-section"
+                            class="hero-btn hero-btn-glass ripple-effect">Live Warehouses</a>
+                    </div>
+                </div>
+            </section>
+
+            <div class="section-divider"></div>
+
+            <section class="trust-section reveal">
+                <p>Trusted by thousands of customers</p>
+                <div class="trust-badges">
+                    <div class="trust-badge">15-Min Delivery</div>
+                    <div class="trust-badge">Eco Packaging</div>
+                    <div class="trust-badge">EV Fleet</div>
+                    <div class="trust-badge">4.6 Rating</div>
+                    <div class="trust-badge">50K+ Orders</div>
+                </div>
+            </section>
+
+            <div class="section-divider"></div>
+
+            <section id="menu" class="reveal">
+                <div id="container">
+                    <h2>Shop Essentials</h2>
+                    <p class="menu-subtitle">Everyday items delivered to your doorstep in minutes</p>
+
+                    <div class="search-container">
+                        <span class="search-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="11" cy="11" r="8"></circle>
+                                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                            </svg></span>
+                        <input type="text" id="menu-search" placeholder="Search products, brands, or categories..."
+                            autocomplete="off">
+                    </div>
+
+                    <div id="menu-filters">
+                        <button class="menus-button active" data-category="all">All Items</button>
+                        <button class="menus-button" data-category="home">Home Essentials</button>
+                        <button class="menus-button" data-category="office">Office Supplies</button>
+                        <button class="menus-button" data-category="kids">Kids</button>
+                        <button class="menus-button" data-category="health">Health & Wellness</button>
+                        <button class="menus-button" data-category="grocery">Grocery</button>
+                        <button class="menus-button" data-category="personal">Personal Care</button>
+                    </div>
+                </div>
+
+                <div id="food-list"></div>
+            </section>
+
+            <div class="section-divider"></div>
+
+            <section id="contact" class="reveal">
+                <div id="container">
+                    <h2>Get In Touch</h2>
+                    <p class="contact-subtitle">We're here 7 days a week to serve you</p>
+
+                    <div class="contact-grid">
+                        <div class="contact-card">
+                            <div class="contact-card-icon phone">📞</div>
+                            <h3>Support Helpline</h3>
+                            <p><a href="tel:+18623060626">+1 (862) 306-0626</a></p>
+                        </div>
+                        <div class="contact-card">
+                            <div class="contact-card-icon email">✉️</div>
+                            <h3>Write To Us</h3>
+                            <p><a href="mailto:napcorp211@gmail.com">napcorp211@gmail.com</a></p>
+                        </div>
+                        <div class="contact-card">
+                            <div class="contact-card-icon hours">🕐</div>
+                            <h3>Operating Hours</h3>
+                            <p>24/7 — Always Open</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <div class="section-divider"></div>
+
+            <section id="map-section" class="reveal">
+                <div id="container">
+                    <h2>Live Warehouse Network</h2>
+                    <p>Real-time fulfillment status across all warehouse locations</p>
+                    <div class="map-legend">
+                        <div class="map-legend-item"><span class="map-legend-dot busy"></span> High Demand</div>
+                        <div class="map-legend-item"><span class="map-legend-dot prepping"></span> Normal</div>
+                        <div class="map-legend-item"><span class="map-legend-dot special"></span> Low Load</div>
+                    </div>
+                    <div class="map-city-tabs">
+                        <button class="map-city-btn active" data-city="delhi">Delhi-NCR (110 Pods)</button>
+                        <button class="map-city-btn" data-city="mumbai">Mumbai (5 Pods)</button>
+                        <button class="map-city-btn" data-city="blr">Bengaluru (5 Pods)</button>
+                        <button class="map-city-btn" data-city="hyd">Hyderabad (5 Pods)</button>
+                    </div>
+                    <div id="map"></div>
+                </div>
+            </section>
+
+            <div class="section-divider"></div>
+
+            <section class="testimonials-section">
+                <div style="text-align: center; margin-bottom: 32px;">
+                    <h2 style="font-size:30px; font-weight:800; color: #0f172a; margin-bottom: 8px;">What Our Customers
+                        Say</h2>
+                    <p style="color: var(--text-muted); font-size: 15px;">Real experiences from verified NapKit shoppers
+                    </p>
+                </div>
+                <div class="testimonials-track" id="testimonials-track"></div>
+            </section>
+        </main>
+    </div>
+
+    <div id="page-reviews" class="page-view">
+        <div class="reviews-container">
+            <div class="reviews-main-card">
+                <div class="page-header">
+                    <h1>Customer Reviews & Verified Ratings</h1>
+                    <p>100% verified feedback from real quick-commerce deliveries across all warehouse hubs.</p>
+                </div>
+
+                <div class="rating-summary-grid">
+                    <div class="score-box">
+                        <div class="score-number">4.6</div>
+                        <div class="score-stars">★★★★½</div>
+                        <div class="score-count">Based on 1,840 verified orders</div>
+                    </div>
+                    <div class="bars-column">
+                        <div class="bar-row">
+                            <span class="bar-label">5 Star</span>
+                            <div class="bar-track">
+                                <div class="bar-fill" style="width: 74%;"></div>
+                            </div>
+                            <span class="bar-pct">74%</span>
+                        </div>
+                        <div class="bar-row">
+                            <span class="bar-label">4 Star</span>
+                            <div class="bar-track">
+                                <div class="bar-fill" style="width: 18%;"></div>
+                            </div>
+                            <span class="bar-pct">18%</span>
+                        </div>
+                        <div class="bar-row">
+                            <span class="bar-label">3 Star</span>
+                            <div class="bar-track">
+                                <div class="bar-fill" style="width: 5%;"></div>
+                            </div>
+                            <span class="bar-pct">5%</span>
+                        </div>
+                        <div class="bar-row">
+                            <span class="bar-label">2 Star</span>
+                            <div class="bar-track">
+                                <div class="bar-fill" style="width: 2%;"></div>
+                            </div>
+                            <span class="bar-pct">2%</span>
+                        </div>
+                        <div class="bar-row">
+                            <span class="bar-label">1 Star</span>
+                            <div class="bar-track">
+                                <div class="bar-fill" style="width: 1%;"></div>
+                            </div>
+                            <span class="bar-pct">1%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="filter-tray">
+                    <button class="filter-btn active" data-filter="all">All Reviews (6)</button>
+                    <button class="filter-btn" data-filter="speed">15-Min Delivery</button>
+                    <button class="filter-btn" data-filter="eco">Eco Packaging</button>
+                    <button class="filter-btn" data-filter="rider">EV Drivers</button>
+                </div>
+
+                <div class="reviews-list" id="reviewsList">
+                    <div class="review-card" data-cat="speed">
+                        <div class="review-header">
+                            <div class="reviewer-info">
+                                <div class="avatar">AM</div>
+                                <div class="reviewer-meta">
+                                    <h4>Arjun Mehta <span class="verified-badge">✓ Verified 15-Min Order</span></h4>
+                                    <div class="review-time">2 hours ago · Delhi Hub</div>
+                                </div>
+                            </div>
+                            <div class="review-stars">★★★★☆</div>
+                        </div>
+                        <p class="review-text">
+                            "Ordered a phone charging cable and organic green tea when my charger stopped working during an urgent meeting. The EV driver was at my doorstep in 16 minutes. Neatly packed in biodegradable bags."
+                        </p>
+                        <div class="review-badges-row">
+                            <span class="badge-pill eco">Biodegradable Pack</span>
+                            <span class="badge-pill">16 Min Delivery</span>
+                            <span class="badge-pill">EV Scooter</span>
+                        </div>
+                    </div>
+
+                    <div class="review-card" data-cat="eco">
+                        <div class="review-header">
+                            <div class="reviewer-info">
+                                <div class="avatar">PS</div>
+                                <div class="reviewer-meta">
+                                    <h4>Priya Sharma <span class="verified-badge">✓ Verified Buyer</span></h4>
+                                    <div class="review-time">Yesterday · Bengaluru Hub</div>
+                                </div>
+                            </div>
+                            <div class="review-stars">★★★★★</div>
+                        </div>
+                        <p class="review-text">
+                            "The recurring weekly delivery for baby wipes and organic dairy essentials is so convenient. Items arrive fresh and without unnecessary plastic."
+                        </p>
+                        <div class="review-badges-row">
+                            <span class="badge-pill eco">180g CO₂ Saved</span>
+                            <span class="badge-pill">Recurring Scheduled</span>
+                        </div>
+                    </div>
+
+                    <div class="review-card" data-cat="rider">
+                        <div class="review-header">
+                            <div class="reviewer-info">
+                                <div class="avatar">RK</div>
+                                <div class="reviewer-meta">
+                                    <h4>Rohan Kapoor <span class="verified-badge">✓ Verified Buyer</span></h4>
+                                    <div class="review-time">2 days ago · Mumbai Hub</div>
+                                </div>
+                            </div>
+                            <div class="review-stars">★★★☆☆</div>
+                        </div>
+                        <p class="review-text">
+                            "Selected the 'Leave at Gate with Security' handover option. Delivery was about 18 minutes due to evening traffic, but rider sent a photo confirmation promptly."
+                        </p>
+                        <div class="review-badges-row">
+                            <span class="badge-pill">Gate Handover</span>
+                            <span class="badge-pill">Driver Chat Verified</span>
+                        </div>
+                    </div>
+
+                    <div class="review-card" data-cat="speed">
+                        <div class="review-header">
+                            <div class="reviewer-info">
+                                <div class="avatar">SD</div>
+                                <div class="reviewer-meta">
+                                    <h4>Sneha Deshmukh <span class="verified-badge">✓ Verified Buyer</span></h4>
+                                    <div class="review-time">3 days ago · Pune Hub</div>
+                                </div>
+                            </div>
+                            <div class="review-stars">★★★★☆</div>
+                        </div>
+                        <p class="review-text">
+                            "Produce arrived fresh in under 15 minutes. Really like the transparency around return rates on the product cards. Would love to see even more local pantry items added."
+                        </p>
+                        <div class="review-badges-row">
+                            <span class="badge-pill">Pune Hub Fulfilled</span>
+                            <span class="badge-pill">Return Rate: 0.8%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="write-section">
+                    <h3>Share Your Experience</h3>
+                    <form class="write-form" id="newReviewForm">
+                        <div style="display:flex; gap:12px; flex-wrap:wrap;">
+                            <input type="text" class="form-input" id="revName" placeholder="Your Name" required style="flex:1; min-width:140px;">
+                            <select class="form-input" id="revHub" style="max-width:180px;">
+                                <option value="Delhi Central Hub">Delhi Central Hub</option>
+                                <option value="Gurugram Cyber Hub">Gurugram Cyber Hub</option>
+                                <option value="Noida Sec-62 Hub">Noida Sec-62 Hub</option>
+                                <option value="South Delhi Hub">South Delhi Hub</option>
+                                <option value="Mumbai BKC Hub">Mumbai BKC Hub</option>
+                                <option value="Bengaluru Hub">Bengaluru Hub</option>
+                                <option value="Hyderabad Hub">Hyderabad Hub</option>
+                            </select>
+                            <select class="form-input" id="revStars" style="max-width:160px;">
+                                <option value="5">★★★★★ (5 Stars)</option>
+                                <option value="4">★★★★☆ (4 Stars)</option>
+                                <option value="3">★★★☆☆ (3 Stars)</option>
+                                <option value="2">★★☆☆☆ (2 Stars)</option>
+                                <option value="1">★☆☆☆☆ (1 Star)</option>
+                            </select>
+                        </div>
+                        <textarea class="form-textarea" id="revText"
+                            placeholder="How was your 15-minute delivery, EV driver, and sustainable packaging?"
+                            required></textarea>
+                        <button type="submit" class="submit-review-btn">Post Verified Review</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="page-settings" class="page-view">
+        <main>
+            <h1 style="font-size:28px; font-weight:800; color:var(--text-primary); margin-bottom:24px;">Settings</h1>
+
+            <div class="settings-section">
+                <h3>Profile</h3>
+                <div class="settings-field">
+                    <label>Full Name</label>
+                    <input type="text" id="set-name" placeholder="Your name">
+                </div>
+                <div class="settings-field">
+                    <label>Phone Number</label>
+                    <input type="tel" id="set-phone" placeholder="+91 98765 43210">
+                </div>
+                <div class="settings-field">
+                    <label>Email</label>
+                    <input type="email" id="set-email" placeholder="you@email.com">
+                </div>
+            </div>
+
+            <div class="settings-section">
+                <h3>Default Delivery Address</h3>
+                <div class="settings-field">
+                    <label>Address</label>
+                    <textarea id="set-address" placeholder="Full delivery address with landmark"></textarea>
+                </div>
+                <div class="settings-field">
+                    <label>City</label>
+                    <input type="text" id="set-city" placeholder="City">
+                </div>
+                <div class="settings-field">
+                    <label>PIN Code</label>
+                    <input type="text" id="set-pin" placeholder="110001">
+                </div>
+            </div>
+
+            <div class="settings-section">
+                <h3>Default Delivery Preferences</h3>
+                <div class="settings-field">
+                    <label>Packaging</label>
+                    <select id="set-packaging">
+                        <option value="biodegradable">Biodegradable</option>
+                        <option value="paper">Paper</option>
+                        <option value="standard">Standard</option>
+                    </select>
+                </div>
+                <div class="settings-field">
+                    <label>Delivery Speed</label>
+                    <select id="set-speed">
+                        <option value="fast">Fast (15 Min)</option>
+                        <option value="standard">Standard (>30 Minutes)</option>
+                    </select>
+                </div>
+                <div class="settings-field">
+                    <label>Handover</label>
+                    <select id="set-handover">
+                        <option value="door">Leave at Door</option>
+                        <option value="hand">Give in Hand</option>
+                        <option value="gate">Leave at Gate</option>
+                    </select>
+                </div>
+                <div class="settings-field">
+                    <label>Vehicle Preference</label>
+                    <select id="set-vehicle">
+                        <option value="ev">EV (Electric)</option>
+                        <option value="gas">Gas</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="settings-section">
+                <h3>Theme</h3>
+                <div class="theme-options">
+                    <button type="button" class="theme-option theme-default active" data-theme="default">
+                        <span class="theme-dot"></span> Default
+                    </button>
+                    <button type="button" class="theme-option theme-halloween-opt" data-theme="halloween">
+                        <span class="theme-dot"></span> Halloween
+                    </button>
+                </div>
+            </div>
+
+            <div class="settings-section">
+                <h3>Your Eco Impact</h3>
+                <div class="eco-stats">
+                    <div class="eco-stat">
+                        <div class="value" id="ecoCo2Val">2.4kg</div>
+                        <div class="label">CO₂ Saved</div>
+                    </div>
+                    <div class="eco-stat">
+                        <div class="value" id="ecoPointsVal">120</div>
+                        <div class="label">Eco Points</div>
+                    </div>
+                    <div class="eco-stat">
+                        <div class="value" id="ecoScoreVal">Excellent</div>
+                        <div class="label">Eco Score</div>
+                    </div>
+                    <div class="eco-stat">
+                        <div class="value" id="ecoOrdersVal">34</div>
+                        <div class="label">Orders</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="settings-section">
+                <h3>Order History</h3>
+                <div id="orderHistoryList">
+                    <div class="order-history-item">
+                        <div><span class="order-id">#EB-4821</span> · LED Desk Lamp, Sticky Notes</div>
+                        <span class="order-status delivered">Delivered</span>
+                    </div>
+                    <div class="order-history-item">
+                        <div><span class="order-id">#EB-4820</span> · Organic Honey, Green Tea</div>
+                        <span class="order-status delivered">Delivered</span>
+                    </div>
+                    <div class="order-history-item">
+                        <div><span class="order-id">#EB-4819</span> · Kids Art Kit</div>
+                        <span class="order-status transit">In Transit</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="btn-row">
+                <button class="settings-btn settings-btn-primary" id="save-settings">Save Settings</button>
+                <button class="settings-btn settings-btn-secondary" id="reset-settings">Reset</button>
+            </div>
+        </main>
+    </div>
+
+    <div id="page-vendor" class="page-view">
+        <main>
+            <h1 style="font-size:28px; font-weight:800; color:var(--text-primary); margin-bottom:24px;">Vendor Portal
+            </h1>
+
+            <div class="vendor-section">
+                <h3>Dashboard</h3>
+                <div class="vendor-stats">
+                    <div class="vendor-stat">
+                        <div class="value">12</div>
+                        <div class="label">Listed Items</div>
+                    </div>
+                    <div class="vendor-stat">
+                        <div class="value">847</div>
+                        <div class="label">Units Sold</div>
+                    </div>
+                    <div class="vendor-stat">
+                        <div class="value">₹42.3K</div>
+                        <div class="label">Revenue</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="vendor-section">
+                <h3>List New Product</h3>
+                <div class="vendor-field">
+                    <label>Product Name</label>
+                    <input type="text" id="v-name" placeholder="e.g., Premium Notebook Set">
+                </div>
+                <div class="vendor-field">
+                    <label>Category</label>
+                    <select id="v-category">
+                        <option value="home">Home</option>
+                        <option value="office">Office</option>
+                        <option value="kids">Kids</option>
+                        <option value="health">Health</option>
+                        <option value="grocery">Grocery</option>
+                        <option value="personal">Personal Care</option>
+                    </select>
+                </div>
+                <div class="vendor-field">
+                    <label>Price (₹)</label>
+                    <input type="number" id="v-price" placeholder="499">
+                </div>
+                <div class="vendor-field">
+                    <label>Description</label>
+                    <textarea id="v-desc" placeholder="Brief product description"></textarea>
+                </div>
+                <div class="vendor-field">
+                    <label>Product Image</label>
+                    <div class="upload-zone" id="upload-zone">
+                        <span class="upload-icon">Upload</span>
+                        Click to upload product image<br>
+                        <small>JPG, PNG up to 5MB</small>
+                    </div>
+                </div>
+                <div class="vendor-field">
+                    <label>Quantity to Ship to Warehouse</label>
+                    <input type="number" id="v-qty" placeholder="100">
+                </div>
+                <div class="vendor-field">
+                    <label>Target Warehouse</label>
+                    <select id="v-warehouse">
+                        <option value="delhi">Delhi Hub</option>
+                        <option value="mumbai">Mumbai Hub</option>
+                        <option value="bengaluru">Bengaluru Hub</option>
+                        <option value="hyderabad">Hyderabad Hub</option>
+                        <option value="chennai">Chennai Hub</option>
+                    </select>
+                </div>
+                <div class="btn-row">
+                    <button class="vendor-btn vendor-btn-primary" id="submit-item">Submit for Review</button>
+                    <button class="vendor-btn vendor-btn-secondary" id="save-draft">Save as Draft</button>
+                </div>
+            </div>
+
+            <div class="vendor-section">
+                <h3>Your Listed Items</h3>
+                <div class="listed-items">
+                    <div class="listed-item">
+                        <div class="listed-item-info">
+                            <span class="listed-item-name">LED Desk Lamp</span>
+                            <span class="listed-item-meta">₹890 · Home · 50 units at Delhi Hub</span>
+                        </div>
+                        <span class="item-status live">Live</span>
+                    </div>
+                    <div class="listed-item">
+                        <div class="listed-item-info">
+                            <span class="listed-item-name">Bamboo Tissue Box</span>
+                            <span class="listed-item-meta">₹450 · Home · 30 units at Mumbai Hub</span>
+                        </div>
+                        <span class="item-status live">Live</span>
+                    </div>
+                    <div class="listed-item">
+                        <div class="listed-item-info">
+                            <span class="listed-item-name">Premium Notebook Set</span>
+                            <span class="listed-item-meta">₹320 · Office · Under review</span>
+                        </div>
+                        <span class="item-status review">In Review</span>
+                    </div>
+                    <div class="listed-item">
+                        <div class="listed-item-info">
+                            <span class="listed-item-name">Organic Shampoo</span>
+                            <span class="listed-item-meta">₹380 · Personal Care · Draft</span>
+                        </div>
+                        <span class="item-status draft">Draft</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="vendor-section">
+                <h3>Prepare Shipping Label</h3>
+                <p style="font-size:14px; color:var(--text-muted); margin-bottom:16px;">Generate a shipping label to
+                    send products to a NapKit warehouse.</p>
+                <div class="vendor-field">
+                    <label>Select Product</label>
+                    <select id="label-product">
+                        <option>LED Desk Lamp — 50 units</option>
+                        <option>Bamboo Tissue Box — 30 units</option>
+                    </select>
+                </div>
+                <div class="vendor-field">
+                    <label>Destination Warehouse</label>
+                    <select id="label-warehouse">
+                        <option>Delhi Hub — 21 Warehouse Lane, Delhi 110001</option>
+                        <option>Mumbai Hub — 14 Dock Road, Mumbai 400001</option>
+                        <option>Bengaluru Hub — 8 Tech Park Rd, Bengaluru 560001</option>
+                    </select>
+                </div>
+                <button class="vendor-btn vendor-btn-primary" id="generate-label" style="margin-top:8px;">Generate
+                    Label</button>
+
+                <div class="shipping-label" id="shipping-label" style="display:none;">
+                    <div class="label-row"><span>From:</span> <strong>Vendor Demo · +91 98765 43210</strong></div>
+                    <div class="label-row"><span>To:</span> <strong id="label-dest">Delhi Hub — 21 Warehouse Lane, Delhi
+                            110001</strong></div>
+                    <div class="label-row"><span>Product:</span> <strong id="label-prod">LED Desk Lamp</strong></div>
+                    <div class="label-row"><span>Qty:</span> <strong id="label-qty">50 units</strong></div>
+                    <div class="label-row"><span>Weight:</span> <strong>12.5 kg (estimated)</strong></div>
+                    <div class="label-row"><span>Tracking:</span> <strong>EB-SHP-48210</strong></div>
+                    <div class="barcode">||| EB-SHP-48210 |||</div>
+                    <div class="btn-row" style="justify-content:center;">
+                        <button class="vendor-btn vendor-btn-secondary" onclick="window.print()">Print Label</button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <div id="page-checkout" class="page-view">
+        <div class="checkout-nav-bar">
+            <a href="#home" data-page="home" class="checkout-brand-link">NapKit</a>
+            <a href="#menu" data-page="#menu" class="checkout-nav-link">← Return to Shop</a>
+        </div>
+
+        <main class="checkout-card futuristic-checkout">
+
+            <div class="summary-bar" id="summaryBar">
+                <div class="summary-left">
+                    <span id="orderRecipientSummary">Order Items</span>
+                    <span id="itemsCountBadge">(0)</span>
+                </div>
+                <div class="summary-total">
+                    <span id="totalPriceVal">₹0</span>
+                    <span id="drawerArrow">▼</span>
+                </div>
+            </div>
+
+            <div class="items-drawer" id="itemsDrawer">
+                <div class="drawer-inner" id="drawerItems"></div>
+            </div>
+
+            <div class="futuristic-orb-zone" id="orbZone">
+                <div class="orb-stage">
+                    <div class="orb-wrapper" id="orbWrapper">
+                        <div class="orb-outer-ring"></div>
+                        <div class="orb-middle-ring"></div>
+                        <div class="orb-core">
+                            <div class="orb-inner-glow"></div>
+                            <div class="orb-particle p1"></div>
+                            <div class="orb-particle p2"></div>
+                            <div class="orb-particle p3"></div>
+                        </div>
+                        <div class="orb-soundwave-bars">
+                            <span class="sw-bar"></span>
+                            <span class="sw-bar"></span>
+                            <span class="sw-bar"></span>
+                            <span class="sw-bar"></span>
+                            <span class="sw-bar"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="orb-question-box" id="orbQuestionBox">
+                    <div class="question-step-pill" id="questionStepPill">Step 1 of 5</div>
+                    <div class="question-stream-text" id="questionText"></div>
+                </div>
+
+                <div class="orb-answer-box" id="orbAnswerBox">
+                    
+                    <div class="pills-group" id="orbPillsGroup"></div>
+                </div>
+            </div>
+
+            <div class="card-form-box" id="cardFormBox">
+                <div class="card-form-header">
+                    <h4>Card Payment</h4>
+                    <span class="card-security-badge">256-bit Encrypted</span>
+                </div>
+                <input type="text" id="cardName" class="card-input" placeholder="Name on Card">
+                <input type="text" id="cardNumber" class="card-input" placeholder="Card Number (4532 •••• •••• 8921)"
+                    maxlength="19">
+                <div style="display:flex; gap:8px;">
+                    <input type="text" id="cardExpiry" class="card-input" placeholder="MM/YY" maxlength="5"
+                        style="flex:1;">
+                    <input type="password" id="cardCvv" class="card-input" placeholder="CVV" maxlength="4"
+                        style="flex:1;">
+                </div>
+                <button class="pay-btn" id="payCardBtn">Complete Payment →</button>
+            </div>
+
+            <div class="rocket-launch-overlay" id="rocketLaunchOverlay">
+                <div class="rocket-scene">
+                    <div class="launch-stars">
+                        <span class="l-star ls1"></span>
+                        <span class="l-star ls2"></span>
+                        <span class="l-star ls3"></span>
+                        <span class="l-star ls4"></span>
+                        <span class="l-star ls5"></span>
+                    </div>
+                    <div class="speed-streaks">
+                        <span class="streak st1"></span>
+                        <span class="streak st2"></span>
+                        <span class="streak st3"></span>
+                        <span class="streak st4"></span>
+                    </div>
+                    <div class="rocket-vessel" id="rocketVessel">
+                        <div class="rocket-body">
+                            <svg viewBox="0 0 64 64" width="84" height="84" fill="none" class="rocket-svg">
+                                
+                                <path d="M32 4 C32 4 45 18 45 38 L19 38 C19 18 32 4 32 4 Z" fill="#0284c7" />
+                                <path d="M32 4 C32 4 40 16 40 32 L24 32 C24 16 32 4 32 4 Z" fill="#38bdf8" />
+                                
+                                <rect x="21" y="34" width="22" height="18" rx="4" fill="#ffffff" stroke="#cbd5e1"
+                                    stroke-width="1.5" />
+                                
+                                <circle cx="32" cy="41" r="5.5" fill="#0f172a" stroke="#38bdf8" stroke-width="2" />
+                                <circle cx="33.5" cy="39.5" r="1.5" fill="#ffffff" />
+                                
+                                <path d="M21 42 L10 53 L21 50 Z" fill="#10b981" />
+                                <path d="M43 42 L54 53 L43 50 Z" fill="#10b981" />
+                                
+                                <path d="M26 52 L38 52 L36 57 L28 57 Z" fill="#475569" />
+                            </svg>
+                        </div>
+                        <div class="rocket-exhaust">
+                            <div class="flame-outer"></div>
+                            <div class="flame-inner"></div>
+                            <div class="thrust-particle tp1"></div>
+                            <div class="thrust-particle tp2"></div>
+                            <div class="thrust-particle tp3"></div>
+                        </div>
+                    </div>
+                    <div class="rocket-status-banner">
+                        <span class="launch-badge">INSTANT DISPATCH</span>
+                        <h3 class="launch-title" id="rocketTitle">Launching Your Delivery!</h3>
+                        <p class="launch-desc" id="rocketDesc">Order dispatched from nearest dark store hub</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="confirm-screen" id="confirmScreen">
+                <div class="orb-confirm-portal">
+                    <div class="confirm-halo"></div>
+                    <div class="check-icon">✓</div>
+                </div>
+                <h2 style="font-size:22px; font-weight:800; margin-top:10px;">Order Confirmed!</h2>
+                <div class="order-tag" id="orderTag">#NK-2237</div>
+                <p style="color:var(--text-muted); font-size:13px; max-width:360px; margin:0 auto;"
+                    id="confirmSummaryDesc">
+                    Dispatched from our nearest sustainable warehouse hub.
+                </p>
+
+                <div class="confirm-details-grid" id="confirmDetailsGrid"></div>
+
+                <div class="countdown-box">
+                    <div class="countdown-time" id="countdownTimer">14:59</div>
+                    <div class="countdown-label">Estimated Delivery Countdown</div>
+                </div>
+
+                <div class="confirm-actions">
+                    <a href="#home" data-page="home" class="confirm-btn btn-home-confirm">Return Home</a>
+                    <a href="#reviews" data-page="reviews" class="confirm-btn btn-rev">Rate Delivery</a>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <footer class="site-footer">
+        <div class="footer-grid">
+            <div class="footer-col">
+                <h4
+                    style="font-size:24px; background: linear-gradient(135deg, #0284c7, #10b981); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+                    NapKit</h4>
+                <p>Ultra-fast quick commerce delivering everyday essentials. Eco-friendly packaging, EV delivery fleet,
+                    and 15-minute fulfillment.</p>
+
+            </div>
+            <div class="footer-col">
+                <h4>Quick Links</h4>
+                <a href="#home" data-page="home">Home</a>
+                <a href="#menu" data-page="#menu">Shop</a>
+                <a href="#map-section" data-page="#map-section">Warehouses</a>
+                <a href="#contact" data-page="#contact">Get In Touch</a>
+                <a href="#reviews" data-page="reviews">Reviews</a>
+                <a href="#settings" data-page="settings">Settings</a>
+                <a href="#vendor" data-page="vendor">Vendor Portal</a>
+            </div>
+            <div class="footer-col">
+                <h4>Categories</h4>
+                <a href="#menu" data-page="#menu" data-category="home">Home Essentials</a>
+                <a href="#menu" data-page="#menu" data-category="office">Office Supplies</a>
+                <a href="#menu" data-page="#menu" data-category="kids">Kids</a>
+                <a href="#menu" data-page="#menu" data-category="health">Health & Wellness</a>
+                <a href="#menu" data-page="#menu" data-category="grocery">Grocery</a>
+                <a href="#menu" data-page="#menu" data-category="personal">Personal Care</a>
+            </div>
+            <div class="footer-col">
+                <h4>Stay Updated</h4>
+                <p>Subscribe for exclusive offers and new product alerts.</p>
+                <div class="newsletter-form">
+                    <input type="email" placeholder="Your email" id="newsletter-email">
+                    <button id="newsletter-btn">Subscribe</button>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2026 NapKit. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="app.js"></script>
+</body>
+
+</html>
